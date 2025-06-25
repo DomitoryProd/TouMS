@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuD</title>
+</head>
+<body>
+    <style>*{font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}</style>
+    <h1>TUD</h1>
+    <p>Matches in here</p>
+    <input type="text" id="main" placeholder="Write to send">
+    <button id="send-participant">Add Participant</button>
+
+    <script>
+        const ws = new WebSocket("ws://localhost:5671");
+        const inp = document.getElementById("main");
+        const btn = document.getElementById("send-participant");
+
+        btn.addEventListener("click", () => {
+            const data = {
+                type: "add_participant",
+                name: inp.value.trim()
+            };
+            ws.send(JSON.stringify(data)); // 👈 This is the important part
+            inp.value = ""; // clear the input
+        });
+
+        ws.addEventListener("open", () => {
+            console.log("connection is established");
+        });
+        
+        
+        ws.addEventListener("message", (e) => {
+            console.log("Server says:", e.data);
+        });
+    </script>
+</body>
+</html>
