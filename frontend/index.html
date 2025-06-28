@@ -6,7 +6,7 @@
     <title>TuD</title>
 </head>
 <body>
-    <style>*{font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}</style>
+    <style></style>
     <h1>TouMS frontend panel</h1>
     <p>Game state live in here:</p>
     <div class="scores">
@@ -24,26 +24,47 @@
     </div>
     <div id="gamestatelive"></div>
     <style>
-        .scores {
-            display: flex;
-            flex-direction: column;
-            width: 250px;
-            gap: 1rem;
-            .scoreWrapper{
+        * {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            html, body {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            .scores {
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
+                width: 250px;
                 gap: 1rem;
-                .score{
+                .scoreWrapper{
                     display: flex;
                     flex-direction: row;
-                    align-items: center;
-                    justify-content: center;
                     gap: 1rem;
-                    border-radius: 12px;
-                    background-color: #000;
-                    color: #fff;
-                    padding: 1rem;
+                    .score{
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 1rem;
+                        border-radius: 12px;
+                        background-color: #000;
+                        color: #fff;
+                        padding: 1rem;
+                    }
                 }
+            }
+            #gamestatelive {
+                background-color: #f8f9fa;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                padding: 1rem;
+                margin-top: 1rem;
+                font-family: 'Courier New', monospace;
+                font-size: 14px;
+                line-height: 1.4;
+                max-height: 400px;
+                overflow-y: auto;
+                white-space: pre-wrap;
             }
         }
     </style>
@@ -63,15 +84,50 @@
         ws.addEventListener("message", (e) => {
             console.log(e.data);
             let data = JSON.parse(e.data);
-            document.getElementById("gamestatelive").innerHTML = e.data;
-            // let data = JSON.parse(e.data);
-            // if (data) {
-
-            //     document.getElementById("scorect").textContent = data.scorect;
-            //     document.getElementById("scoret").textContent = data.scoret;
-            // }
             
+            // Display the full data object in readable format
+            let formattedData = formatObject(data);
+            document.getElementById("gamestatelive").innerHTML = formattedData;
+            
+            // Also update scores if they exist in the data
+            if (data.map && data.map.team_ct && data.map.team_t) {
+                document.getElementById("scorect").innerHTML = data.map.team_ct.score || 0;
+                document.getElementById("scoret").innerHTML = data.map.team_t.score || 0;
+            }
         });
+        
+        // Function to format object into readable HTML
+        function formatObject(obj, indent = 0) {
+            let html = '';
+            const indentStr = '&nbsp;'.repeat(indent * 4);
+            
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    const value = obj[key];
+                    const valueType = typeof value;
+                    
+                    html += `<div style="margin-left: ${indent * 20}px; margin-bottom: 5px;">`;
+                    
+                    if (valueType === 'object' && value !== null) {
+                        html += `<strong style="color: #007acc;">${key}:</strong>`;
+                        html += formatObject(value, indent + 1);
+                    } else {
+                        let displayValue = value;
+                        if (valueType === 'string') {
+                            displayValue = `"${value}"`;
+                        } else if (valueType === 'boolean') {
+                            displayValue = value ? 'true' : 'false';
+                        }
+                        
+                        html += `<strong style="color: #007acc;">${key}:</strong> <span style="color: #d63384;">${displayValue}</span>`;
+                    }
+                    
+                    html += '</div>';
+                }
+            }
+            
+            return html;
+        }
     </script>
 </body>
 </html>
