@@ -11,6 +11,23 @@
     <p>Matches in here</p>
     <input type="text" id="main" placeholder="Write to send">
     <button id="send-participant">Add Participant</button>
+    <div class="score">
+        Score CT side
+        <p id="scorect">0</p>
+    </div>
+    <div class="score">
+        Score T side
+        <p id="scoret">0</p>
+    </div>
+    <style>
+        .score {
+            border-radius: 12px;
+            background-color: #000;
+            color: #fff;
+            padding: 12px;
+            margin: 12px;
+        }
+    </style>
 
     <script>
         const ws = new WebSocket("ws://localhost:5671");
@@ -32,7 +49,21 @@
         
         
         ws.addEventListener("message", (e) => {
-            console.log("Server says:", e.data);
+            let data = JSON.parse(e.data);
+            console.log("Server says:", data);
+            console.log(data.scores.ct);
+            if (data.type === "update_scores") {
+                console.log("update_scores");
+                document.getElementById("scorect").innerHTML = data.scores.ct;
+                document.getElementById("scoret").innerHTML = data.scores.t;
+            }
+            // let data = JSON.parse(e.data);
+            // if (data) {
+
+            //     document.getElementById("scorect").textContent = data.scorect;
+            //     document.getElementById("scoret").textContent = data.scoret;
+            // }
+            
         });
     </script>
 </body>

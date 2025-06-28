@@ -1,24 +1,8 @@
-const WebSocket = require("ws");
-const Database = require('better-sqlite3');
+const express = require('express');
+const app = express();
+app.use(express.json());
 
-const db = new Database('./tournament.sqlite');
-// Create tables if they don't already exist
-db.exec(`
-CREATE TABLE IF NOT EXISTS participants (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
-);
-CREATE TABLE IF NOT EXISTS matches (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    participant1_id INTEGER NOT NULL,
-    participant2_id INTEGER NOT NULL,
-    score1 INTEGER DEFAULT 0,
-    score2 INTEGER DEFAULT 0,
-    status TEXT DEFAULT 'pending',
-    FOREIGN KEY (participant1_id) REFERENCES participants(id),
-    FOREIGN KEY (participant2_id) REFERENCES participants(id)
-);
-`);
+const WebSocket = require("ws");
 
 const wss = new WebSocket.Server({ port: 5671 });
 console.log("Server is live!");
@@ -26,25 +10,47 @@ console.log("Server is live!");
 wss.on("connection", ws => {
     console.log("Player one has connected!");
     
+    
     ws.on("message", data => {
-        const message = JSON.parse(data);
-        if (message.type === "add_participant") {
-            const stmt = db.prepare("INSERT INTO participants (name) VALUES (?)");
-            const info = stmt.run(message.name);
-            ws.send(`Participant added with id ${info.lastInsertRowid}`);
-        }
-
-        if (message.type === "update_score") {
-            const stmt = db.prepare("UPDATE matches SET score1=?, score2=?, status=? WHERE id=?");
-            stmt.run(message.score1, message.score2, message.status, message.matchId);
-            ws.send(`Updated match ${message.matchId}`);
-        }
-
-        console.log(`finally some data here: ${data}`);
-        ws.send("We recorded your message: " + data);
+        console.log(data);
     });
 
+   
     ws.on("close", ()=>{
         console.log("player one has left");
     });
 });
+
+
+app.post('/cs2', (req, res) => {
+    
+
+    console.log('Listening for CS2 Game State data...');
+    if(req.body != null) {
+
+        let scorect = req.body && req.body.map ? req.body.map.team_ct.score : 0;
+        let scoret = req.body && req.body.map ? req.body.map.team_t.score : 0;
+        console.log("CT Score: " + scorect + " T Score: " + scoret);
+        // Create a message object to send
+        const message = {
+            type: "update_scores",
+            scores: {
+                ct: scorect,
+                t: scoret
+            }
+        };
+        // Send the message to all connected WebSocket clients
+        wss.clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify(message));
+            }
+        });
+    }
+    
+    res.send('ok');
+});
+
+app.listen(3000, () => {
+    console.log('Game is connected!');
+});
+
