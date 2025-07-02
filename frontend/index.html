@@ -4,70 +4,258 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TuD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <style></style>
-    <h1>TouMS frontend panel</h1>
-    <p>Game state live in here:</p>
-    <div class="scores">
-        <h2>Side scores</h2>
-        <div class="scoreWrapper">
-            <div class="score">
-                CT
-                <p id="scorect">0</p>
+    <style>
+        /* 1. Use a more-intuitive box-sizing model */
+        *, *::before, *::after {
+        box-sizing: border-box;
+        }
+
+        /* 2. Remove default margin */
+        * {
+        margin: 0;
+        }
+
+        /* 3. Enable keyword animations */
+        @media (prefers-reduced-motion: no-preference) {
+        html {
+            interpolate-size: allow-keywords;
+        }
+        }
+
+        body {
+        /* 4. Add accessible line-height */
+        line-height: 1.5;
+        /* 5. Improve text rendering */
+        -webkit-font-smoothing: antialiased;
+        }
+
+        /* 6. Improve media defaults */
+        img, picture, video, canvas, svg {
+        display: block;
+        max-width: 100%;
+        }
+
+        /* 7. Inherit fonts for form controls */
+        input, button, textarea, select {
+        font: inherit;
+        }
+
+        /* 8. Avoid text overflows */
+        p, h1, h2, h3, h4, h5, h6 {
+        overflow-wrap: break-word;
+        }
+
+        /* 9. Improve line wrapping */
+        p {
+        text-wrap: pretty;
+        }
+        h1, h2, h3, h4, h5, h6 {
+        text-wrap: balance;
+        }
+
+        /*
+        10. Create a root stacking context
+        */
+        #root, #__next {
+        isolation: isolate;
+        }
+
+
+
+        * {
+            font-family: Roboto;
+            html, body {
+                width: 100%;
+                height: 100%;
+                --color-ct: #07439e;
+                --color-t: #c03f04;
+            }
+            .wrapper {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 100%;
+                height: 100vh;
+                overflow: hidden;
+                padding: 2rem 0 2rem 0;
+                .scores {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    transform:skewX(-7deg);
+                    div {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: row;
+                        
+                        width: 1000px;
+                        h1 {
+                            font-weight: 500;
+                            font-size: 4rem;
+                        }
+                        &#ct {
+                            background-color: #0056d8d8;
+                            color: #ffffff;
+                        }
+                        &#t {
+                            background-color: #c03f04d8;
+                            color: #ffffff;
+                        }
+                    }
+                    span {
+                        color: #ffffff;
+                        font-size: 6rem;
+                        font-weight: 900;
+                        padding: 1rem 2rem 1rem 2rem;
+                        &#scorect {
+                            background-color: var(--color-ct);
+                        }
+                        &#scoret {
+                            background-color: var(--color-t);
+                        }
+                    }
+                }
+                .playerstats {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    transform:skewX(-7deg);
+                    .centerplank {
+                        background-color: #cececed8;
+                        width: 50%;
+                        color: #ffffff;
+                        font-size: 3rem;
+                        &.ct {
+                            background-color: #0056d888;
+                            color: #ffffff;
+                            font-weight: 900;
+                            .st {
+                                background-color: var(--color-ct);
+                                
+                            }
+                        }
+                        &.t {
+                            background-color: #c03f0488;
+                            color: #ffffff;
+                            font-weight: 900;
+                            .st {
+                                background-color: var(--color-t);
+                                
+                            }
+                        }
+                        .row {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            justify-content: start;
+                            padding: 1rem 2rem 1rem 2rem;
+                            &.st {
+                                display: flex;
+                                flex-direction: row;
+                                align-items: center;
+                                justify-content: space-between;
+                                gap: 1rem;
+                            }
+
+                            .kda {
+                                display: flex;
+                                flex-direction: row;
+                                align-items: center;
+                                justify-content: start;
+                                gap: 1rem;
+                                div {
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: center;
+                                    justify-content: center;
+                                    gap: 0.1rem;
+                                    width: 50px;
+                                    p {
+                                        font-size: 1.5rem;
+                                        font-weight: 500;
+                                    }
+                                        
+                                }
+                            }
+                            
+                            div {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                flex-direction: row;
+                                font-size: 2rem;
+                                font-weight: 500;
+                                span {
+                                    font-size: 3rem;
+                                    font-weight: 900;
+                                }
+
+                            }
+                        }
+                    }
+
+                }
+            }
+            
+        }
+    </style>
+    <div class="wrapper">
+        <div class="scores">
+            <div id="ct">
+                <h1></h1>
             </div>
-            <div class="score">
-                T
-                <p id="scoret">0</p>
+            <span id="scorect">0</span>
+            <span id="scoret">0</span>
+            <div id="t">
+                <h1></h1>
+            </div>
+        </div>
+        <div class="playerstats">
+            <div id="centerplank" class="centerplank">
+                <div class="row name" id="name"></div>
+                <div class="row st">
+                    <div class="kda">
+                        <div class="stat icon-kills">
+                            <p>K</p>
+                            <span id="kills"></span>
+                        </div>
+                        <div class="stat icon-deaths">
+                            <p>D</p>
+                            <span id="deaths"></span>
+                        </div>
+                        <div class="stat icon-assists">
+                            <p>A</p>
+                            <span id="assists"></span>
+                        </div>
+                    </div>
+                    <div class="stats">
+                        <div class="stat icon-money">
+                            💲
+                            <span id="money"></span>
+                        </div>
+                        <div class="stat icon-armor">
+                            🛡️
+                            <span id="armor"></span>
+                        </div>
+                        <div class="stat icon-health">
+                            ❤️
+                            <span id="health"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div id="gamestatelive"></div>
-    <style>
-        * {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            html, body {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-            .scores {
-                display: flex;
-                flex-direction: column;
-                width: 250px;
-                gap: 1rem;
-                .scoreWrapper{
-                    display: flex;
-                    flex-direction: row;
-                    gap: 1rem;
-                    .score{
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 1rem;
-                        border-radius: 12px;
-                        background-color: #000;
-                        color: #fff;
-                        padding: 1rem;
-                    }
-                }
-            }
-            #gamestatelive {
-                background-color: #f8f9fa;
-                border: 1px solid #dee2e6;
-                border-radius: 8px;
-                padding: 1rem;
-                margin-top: 1rem;
-                font-family: 'Courier New', monospace;
-                font-size: 14px;
-                line-height: 1.4;
-                max-height: 400px;
-                overflow-y: auto;
-                white-space: pre-wrap;
-            }
-        }
-    </style>
 
     <script>
         // Connect to WebSocket on the same port as the Express server
@@ -80,18 +268,309 @@
             console.log("connection is established");
         });
         
+        const gameState = {
+            provider: {
+            name: "Counter-Strike: Global Offensive",
+            appid: 730,
+            version: 13923,
+            steamid: "76561198000000000",
+            timestamp: 1719761234
+            },
+            map: {
+            mode: "competitive",
+            name: "de_inferno",
+            phase: "live",
+            round: 8,
+            team_ct: {
+                score: 4,
+                consecutive_round_losses: 0,
+                timeouts_remaining: 1,
+                matches_won_this_series: 0
+            },
+            team_t: {
+                score: 3,
+                consecutive_round_losses: 1,
+                timeouts_remaining: 1,
+                matches_won_this_series: 0
+            },
+            round_wins: {
+                ct: [],
+                t: []
+            }
+            },
+            round: {
+            phase: "live",
+            bomb: "planted",
+            win_team: ""
+            },
+            phase_countdowns: {
+            phase: "bomb",
+            phase_ends_in: "32.1"
+            },
+            player: {
+            steamid: "76561198000000000",
+            name: "Player1",
+            team: "CT",
+            observer_slot: 1,
+            activity: "playing",
+            state: {
+                health: 76,
+                armor: 100,
+                helmet: true,
+                flashed: 0,
+                smoked: 0,
+                burning: 0,
+                money: 250,
+                round_kills: 1,
+                round_killhs: 1,
+                equip_value: 4300
+            },
+            weapons: {
+                weapon_0: {
+                name: "weapon_ak47",
+                paintkit: "default",
+                type: "rifle",
+                state: "holstered",
+                ammo_clip: 30,
+                ammo_clip_max: 30,
+                ammo_reserve: 90
+                },
+                weapon_1: {
+                name: "weapon_glock",
+                type: "pistol",
+                state: "active",
+                ammo_clip: 20,
+                ammo_clip_max: 20,
+                ammo_reserve: 120
+                },
+                weapon_2: {
+                name: "weapon_flashbang",
+                type: "Grenade",
+                state: "holstered",
+                ammo_reserve: 1
+                }
+            },
+            match_stats: {
+                kills: 12,
+                assists: 3,
+                deaths: 4,
+                mvps: 2,
+                score: 34
+            }
+            },
+            allplayers: {
+            "76561198000000000": {
+                name: "Player1",
+                observer_slot: 1,
+                team: "CT",
+                state: {
+                health: 76,
+                armor: 100,
+                helmet: true,
+                flashed: 0,
+                smoked: 0,
+                burning: 0,
+                money: 250,
+                round_kills: 1,
+                round_killhs: 1,
+                equip_value: 4300
+                },
+                match_stats: {
+                kills: 12,
+                assists: 3,
+                deaths: 4,
+                mvps: 2,
+                score: 34
+                },
+                weapons: {
+                weapon_0: {
+                    name: "weapon_ak47",
+                    paintkit: "default",
+                    type: "rifle",
+                    state: "holstered",
+                    ammo_clip: 30,
+                    ammo_clip_max: 30,
+                    ammo_reserve: 90
+                },
+                weapon_1: {
+                    name: "weapon_glock",
+                    type: "pistol",
+                    state: "active",
+                    ammo_clip: 20,
+                    ammo_clip_max: 20,
+                    ammo_reserve: 120
+                }
+                },
+                position: "102.1,300.4,18.0",
+                forward: "1,0,0"
+            },
+            "76561198000000001": {
+                name: "Player2",
+                observer_slot: 2,
+                team: "CT",
+                state: {
+                health: 100,
+                armor: 100,
+                helmet: true,
+                money: 800,
+                round_kills: 0,
+                round_killhs: 0,
+                equip_value: 3700
+                },
+                match_stats: {
+                kills: 5,
+                assists: 2,
+                deaths: 6,
+                mvps: 1,
+                score: 20
+                },
+                weapons: {
+                weapon_0: {
+                    name: "weapon_m4a1",
+                    type: "rifle",
+                    state: "active",
+                    ammo_clip: 25,
+                    ammo_clip_max: 25,
+                    ammo_reserve: 75
+                }
+                },
+                position: "150.0,275.0,18.0",
+                forward: "0,1,0"
+            },
+            "76561198000000002": {
+                name: "Player3",
+                observer_slot: 3,
+                team: "T",
+                state: {
+                health: 100,
+                armor: 50,
+                helmet: false,
+                money: 150,
+                round_kills: 0,
+                round_killhs: 0,
+                equip_value: 2900
+                },
+                match_stats: {
+                kills: 7,
+                assists: 1,
+                deaths: 5,
+                mvps: 0,
+                score: 17
+                },
+                weapons: {
+                weapon_0: {
+                    name: "weapon_mac10",
+                    type: "smg",
+                    state: "active",
+                    ammo_clip: 30,
+                    ammo_clip_max: 30,
+                    ammo_reserve: 100
+                }
+                },
+                position: "400.0,150.0,18.0",
+                forward: "-1,0,0"
+            },
+            "76561198000000003": {
+                name: "Player4",
+                observer_slot: 4,
+                team: "T",
+                state: {
+                health: 55,
+                armor: 0,
+                helmet: false,
+                money: 300,
+                round_kills: 1,
+                round_killhs: 0,
+                equip_value: 2500
+                },
+                match_stats: {
+                kills: 10,
+                assists: 4,
+                deaths: 7,
+                mvps: 1,
+                score: 28
+                },
+                weapons: {
+                weapon_0: {
+                    name: "weapon_tec9",
+                    type: "pistol",
+                    state: "active",
+                    ammo_clip: 18,
+                    ammo_clip_max: 18,
+                    ammo_reserve: 90
+                }
+                },
+                position: "450.0,180.0,18.0",
+                forward: "-1,0,0"
+            },
+            "76561198000000004": {
+                name: "Player5",
+                observer_slot: 5,
+                team: "T",
+                state: {
+                health: 0,
+                armor: 0,
+                helmet: false,
+                money: 0,
+                round_kills: 0,
+                round_killhs: 0,
+                equip_value: 0
+                },
+                match_stats: {
+                kills: 2,
+                assists: 0,
+                deaths: 9,
+                mvps: 0,
+                score: 6
+                },
+                weapons: {},
+                position: "0,0,0",
+                forward: "0,0,0"
+            }
+            },
+            grenades: [],
+            bomb: {
+            state: "planted",
+            position: "300.1,240.5,18.0",
+            player: "76561198000000003",
+            countdown: "32.1"
+            }
+        };
+
+        
         
         ws.addEventListener("message", (e) => {
             console.log(e.data);
             let data = JSON.parse(e.data);
+            console.log(data.player.name);
+
+            source = data;
+            if (data.player.team == "CT") {
+                document.getElementById("centerplank").classList.remove("ct");
+                document.getElementById("centerplank").classList.remove("t");
+                document.getElementById("centerplank").classList.add("ct");
+            } else {
+                document.getElementById("centerplank").classList.remove("ct");
+                document.getElementById("centerplank").classList.remove("t");
+                document.getElementById("centerplank").classList.add("t");
+            }
             
+            document.getElementById("scorect").innerHTML = source.map.team_ct.score || 0;
+            document.getElementById("scoret").innerHTML = source.map.team_t.score || 0;
+
+            document.getElementById("name").innerHTML = source.player.name;
+            document.getElementById("kills").innerHTML = source.player.match_stats.kills;
+            document.getElementById("assists").innerHTML = source.player.match_stats.assists;
+            document.getElementById("deaths").innerHTML = source.player.match_stats.deaths;
+            document.getElementById("health").innerHTML = source.player.state.health;
+            document.getElementById("armor").innerHTML = source.player.state.armor;
+            document.getElementById("money").innerHTML = source.player.state.money;
             // Display the full data object in readable format
             let formattedData = formatObject(data);
-            document.getElementById("gamestatelive").innerHTML = formattedData;
             
             // Also update scores if they exist in the data
             if (data.map && data.map.team_ct && data.map.team_t) {
-                document.getElementById("scorect").innerHTML = data.map.team_ct.score || 0;
+                document.getElementById("scorect").innerHTML = game.map.team_ct.score || 0;
                 document.getElementById("scoret").innerHTML = data.map.team_t.score || 0;
             }
         });
