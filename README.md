@@ -28,3 +28,8 @@ Planned and done:
     - Editor for brackets
     - Deep integration with server contol and obs control
         Triggering bracket progression based on game's state, triggering server and obs commands based on progression or schedule of tournament
+
+I'll implement more from here
+https://www.reddit.com/r/GlobalOffensive/comments/cjhcpy/game_state_integration_a_very_large_and_indepth/
+
+Yeah via sending with throttle of 0.005 and same buffer I put straign on network, but it should be managable for lan environments with only one instance running this software

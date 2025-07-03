@@ -12,6 +12,7 @@
   "dependencies": {
     "better-sqlite3": "^12.1.1",
     "express": "^5.1.0",
+    "rcon": "^1.1.0",
     "ws": "^8.18.2"
   }
 }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toums Admin</title>
+</head>
+<body>
+    <h1>Toums Admin</h1>
+    <div class="container">
+        <label for="message">
+            Message:
+            <input type="text" id="message" name="message">
+        </label>
+        <button id="sendButton">Send</button>
+    </div>
+    <script>
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${wsProtocol}//${window.location.hostname}:3000`;
+        const ws = new WebSocket(wsUrl);
+
+        ws.addEventListener("open", () => {
+            console.log("connection is established");
+        });
+
+        ws.addEventListener("message", (event) => {
+            const data = JSON.parse(event.data);
+            console.log(data);
+        });
+
+        document.getElementById("sendButton").addEventListener("click", () => {
+            const message = document.getElementById("message").value;
+            ws.send(JSON.stringify({type: "rcon", message: message}));
+        });
+        
+    </script>
+</body>
+</html>
